@@ -56,7 +56,7 @@ const SelfAnalysisApp = () => {
     }
   ];
 
-  const handleAnswer = (questionId: string, answer: any) => {
+  const handleAnswer = (questionId: string, answer: Option) => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: answer
