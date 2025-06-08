@@ -3,12 +3,29 @@
 import React, { useState } from 'react';
 import { ChevronRight, RotateCcw, User, Heart, Target, Zap } from 'lucide-react';
 
-const SelfAnalysisApp = () => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [showResult, setShowResult] = useState(false);
+// 型定義
+type OptionType = {
+  value: string;
+  label: string;
+  weight: number;
+};
 
-  const questions = [
+type QuestionType = {
+  id: string;
+  question: string;
+  options: OptionType[];
+};
+
+type AnswersType = {
+  [key: string]: OptionType;
+};
+
+const SelfAnalysisApp = () => {
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [answers, setAnswers] = useState<AnswersType>({});
+  const [showResult, setShowResult] = useState<boolean>(false);
+
+  const questions: QuestionType[] = [
     {
       id: 'social',
       question: '新しい環境で人と関わるとき、どちらが当てはまりますか？',
@@ -56,7 +73,7 @@ const SelfAnalysisApp = () => {
     }
   ];
 
-  const handleAnswer = (questionId: string, answer: Option) => {
+  const handleAnswer = (questionId: string, answer: OptionType) => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: answer
@@ -86,23 +103,18 @@ const SelfAnalysisApp = () => {
       proactive: 0
     };
 
-    // 外向性スコア
     if (answers.social?.value === 'extrovert') scores.extroversion += 2;
     else if (answers.social?.value === 'ambivert') scores.extroversion += 1;
 
-    // 分析的思考スコア
     if (answers.decision?.value === 'logic') scores.analytical += 2;
     else if (answers.decision?.value === 'balance') scores.analytical += 1;
 
-    // 構造化スコア
     if (answers.work_style?.value === 'planned') scores.structured += 2;
     else if (answers.work_style?.value === 'flexible') scores.structured += 1;
 
-    // 達成志向スコア
     if (answers.motivation?.value === 'achievement') scores.achievement += 2;
     else if (answers.motivation?.value === 'growth') scores.achievement += 1;
 
-    // 積極性スコア
     if (answers.stress?.value === 'action') scores.proactive += 2;
     else if (answers.stress?.value === 'reflect') scores.proactive += 1;
 
@@ -183,7 +195,7 @@ const SelfAnalysisApp = () => {
           <h3 className="font-semibold text-gray-800 mb-4">詳細スコア</h3>
           <div className="space-y-3">
             {Object.entries(scores).map(([key, score]) => {
-              const labels = {
+              const labels: { [key: string]: string } = {
                 extroversion: '外向性',
                 analytical: '分析的思考',
                 structured: '構造化',
@@ -299,7 +311,6 @@ const SelfAnalysisApp = () => {
   );
 };
 
-// export default SelfAnalysisApp;
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 py-8">
